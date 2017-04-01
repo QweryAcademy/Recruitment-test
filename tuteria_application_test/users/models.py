@@ -56,7 +56,7 @@ class GClass(models.QuerySet):
         return self.with_transaction_total().with_bookings()
 
     def no_bookings(self):
-        return self.filter(orders=None).reverse().with_transaction_total(c)
+        return self.filter(orders=None).reverse().with_transaction_total()
 
 
 @python_2_unicode_compatible
