@@ -83,8 +83,19 @@ class User(AbstractUser):
 
 
 class Booking(models.Model):
+    CANCELLED = -1
+    NOT_STARTED = 0
+    SCHEDULED = 1
+    COMPLETED = 2
+    Status = (
+        (CANCELLED, 'cancelled'),
+        (NOT_STARTED, 'not_started'),
+        (SCHEDULED, 'scheduled'),
+        (COMPLETED, 'completed')
+        )
     user = models.ForeignKey(User, null=True, related_name='orders')
     order = models.CharField(max_length=12, primary_key=True, db_index=True)
+    status = models.IntegerField(choices=Status, default=NOT_STARTED)
 
 
 class Wallet(models.Model):
