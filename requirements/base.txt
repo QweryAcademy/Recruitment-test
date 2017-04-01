@@ -20,7 +20,7 @@ django-crispy-forms==1.6.1
 django-model-utils==2.6
 
 # Images
-Pillow==3.4.2
+Pillow==4.0.0
 
 # For user registration, either via email or social
 # Well-built with regular release cycles!
@@ -28,10 +28,10 @@ django-allauth==0.29.0
 
 
 # Python-PostgreSQL Database Adapter
-psycopg2==2.6.2
+psycopg2==2.7.1
 
 # Unicode slugification
-awesome-slugify==1.6.5
+# awesome-slugify==1.6.5
 
 # Time zones support
 pytz==2016.10
@@ -45,3 +45,6 @@ redis>=2.10.5
 
 
 # Your custom requirements go here
+
+# Django REST framework 
+djangorestframework==3.6.2
