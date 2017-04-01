@@ -39,6 +39,26 @@ class GClass(models.QuerySet):
     #return self
 
 
+class GClass(models.QuerySet):
+    def with_bookings(self):
+        result = [user.pk for user in self.all() if user.orders.count() > 0]
+#        for user in self.all():
+#            if user.orders.count()>0:
+#                result.append(user.pk)
+        return self.filter(pk__in=result)
+
+    def with_transaction_total(self):
+        return self.exclude(wallet=None).annotate(
+            transaction_total=models.Sum('wallet__transactions__total')
+        )
+
+    def with_transaction_and_booking(self):
+        return self.with_transaction_total().with_bookings()
+
+    def no_bookings(self):
+        return self.filter(orders=None).reverse().with_transaction_total(c)
+
+
 @python_2_unicode_compatible
 class User(AbstractUser):
 
@@ -60,6 +80,7 @@ class User(AbstractUser):
     #         Wallet.objects.create(owner=self)
     #     result = self.wallet.transactions.aggregate(total=models.Sum('total'))
     #     return result['total'] or 0
+
 
 class Booking(models.Model):
     user = models.ForeignKey(User, null=True, related_name='orders')

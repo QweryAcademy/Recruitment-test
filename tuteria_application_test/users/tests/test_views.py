@@ -11,7 +11,9 @@ from ..views import (
     UserUpdateView,
 )
 
-UserApiView = ''
+
+UserApiView = 'user'
+
 
 class BaseUserTestCase(TestCase):
 
@@ -69,6 +71,7 @@ class TestUserUpdateView(BaseUserTestCase):
         )
 
 class DjangoRestFrameworkUsageApiTestCase(TestCase):
+
 
     def setUp(self):
         self.factory = APIRequestFactory()
