@@ -8,18 +8,46 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 
+class GClass(models.QuerySet):
+    def with_bookings(self):
+        result = [user.pk for user in self.all() if user.orders.count() > 0]
+#        for user in self.all():
+#            if user.orders.count()>0:
+#                result.append(user.pk)
+        return self.filter(pk__in=result)
+
+    def with_transaction_total(self):
+        return self.exclude(wallet=None).annotate(
+            transaction_total=models.Sum('wallet__transactions__total')
+        )
+
+    def with_transaction_and_booking(self):
+        return self.with_transaction_total().with_bookings()
+
+    def no_bookings(self):
+        return self.filter(orders=None).reverse().with_transaction_total(c)
+
+
 @python_2_unicode_compatible
 class User(AbstractUser):
 
     # First Name and Last Name do not cover name patterns
     # around the globe.
     name = models.CharField(_('Name of User'), blank=True, max_length=255)
+    g_objects = GClass().as_manager()
     
     def __str__(self):
         return self.username
 
     def get_absolute_url(self):
         return reverse('users:detail', kwargs={'username': self.username})
+
+    # @property
+    # def transaction_total(self):
+    #     if not hasattr(self, 'wallet'):
+    #         Wallet.objects.create(owner=self)
+    #     result = self.wallet.transactions.aggregate(total=models.Sum('total'))
+    #     return result['total'] or 0
 
 
 class Booking(models.Model):
