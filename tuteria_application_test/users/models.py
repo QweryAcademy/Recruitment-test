@@ -8,38 +8,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 class GClass(models.QuerySet):
-        def with_bookings(self):
-            result = [user.pk for user in self.all() if user.orders.count() > 0]
-           # for user in self.all():
-            #    if user.orders.count() > 0 
-             #   result.append(user)
-            return self.filter(pk__in=result)
-        
-        def with_transaction_total(self):
-            result = []
-            for user in self.all():
-                if hasattr(user, 'wallet'):
-                    result.append(user.pk)
-            return self.filter(pk__in=result)
-
-        def with_transaction_and_booking(self):
-            result = []
-            for user in self.all():
-                if (hasattr(user, 'wallet' )) & (user.orders.count() > 0):
-                    result.append(user.pk)
-            return self.filter(pk__in=result)
-
-        def no_bookings(self):
-               
-            #Entry.objects.filter(pub_date__isnull=True)
-            return self.filter(orders__isnull=True).reverse()
-
-
-    #import pdb; pdb.set_trace()
-    #return self
-
-
-class GClass(models.QuerySet):
     def with_bookings(self):
         result = [user.pk for user in self.all() if user.orders.count() > 0]
 #        for user in self.all():
@@ -56,7 +24,8 @@ class GClass(models.QuerySet):
         return self.with_transaction_total().with_bookings()
 
     def no_bookings(self):
-        return self.filter(orders=None).reverse().with_transaction_total()
+        #Entry.objects.filter(pub_date__isnull=True)
+        return self.filter(orders__isnull=True).reverse().with_transaction_total()
 
 
 @python_2_unicode_compatible
